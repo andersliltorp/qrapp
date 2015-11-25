@@ -11,9 +11,33 @@ firebaseApp.run(function($ionicPlatform) {
         }
     });
 });
+
+firebaseApp.config(function ($stateProvider, $urlRouterProvider) {
+
+    $stateProvider
+
+      .state('test', {
+        url: '/test',
+        templateUrl: 'templates/test.html', // found in the templates folder we created in the beginning - login.html
+        controller: 'ExampleController' // this is found in loginController.js
+      })
+
+      .state('home', {
+        url: '/home',
+        templateUrl: 'templates/home.html', // found in the templates folder we created in the beginning - login.html
+        controller: 'ExampleController' // this is found in loginController.js
+      })
+
+    /*
+    This is for handling if a you go to a link like "localhost:8000/#/facebook"
+    it will not exists and then you will betaken to the defined state
+    in this case the login state
+     */
+    $urlRouterProvider.otherwise('/home')
+  })
  
  
-firebaseApp.controller("ExampleController", function($scope, $rootScope, $firebaseAuth, $cordovaOauth) {
+firebaseApp.controller("ExampleController", function($scope, $rootScope, $state, $firebaseAuth, $cordovaOauth) {
  
     var auth = $firebaseAuth(fb);
  
@@ -21,7 +45,8 @@ firebaseApp.controller("ExampleController", function($scope, $rootScope, $fireba
         $cordovaOauth.facebook("631605996943053", ["email"]).then(function(result) {
             auth.$authWithOAuthToken("facebook", result.access_token).then(function(authData) {
                 console.log(JSON.stringify(authData));
-                $rootScope.auth = authData;
+                $rootScope.authData = authData;
+                $state.go('test');
             }, function(error) {
                 console.error("ERROR: " + error);
             });
