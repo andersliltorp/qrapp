@@ -1,4 +1,4 @@
-var firebaseApp = angular.module('starter', ['ionic', 'firebase', 'ngCordovaOauth']);
+var firebaseApp = angular.module('starter', ['ionic', 'firebase', 'ngCordovaOauth', 'ja.qr']);
 var fb = new Firebase("https://sweltering-torch-8697.firebaseio.com");
  
 firebaseApp.run(function($ionicPlatform) {
@@ -44,8 +44,22 @@ firebaseApp.controller("ExampleController", function($scope, $rootScope, $state,
     $scope.login = function() {
         $cordovaOauth.facebook("631605996943053", ["email"]).then(function(result) {
             auth.$authWithOAuthToken("facebook", result.access_token).then(function(authData) {
-                console.log(JSON.stringify(authData));
                 $rootScope.authData = authData;
+
+                var ref = new Firebase("https://sweltering-torch-8697.firebaseio.com/");
+                var users = ref.child("users");
+
+                users.once('value', function(snapshot) {
+                  if (!snapshot.hasChild(authData.facebook.id)) {
+                    var phone = prompt("Please enter your phone no.", "");
+                    users.child(authData.facebook.id).set({ 
+                       "fb": authData.facebook,
+                       "phone": phone,
+                       "id": authData.facebook.id,
+                    });
+                  }
+                });
+
                 $state.go('test');
             }, function(error) {
                 console.error("ERROR: " + error);

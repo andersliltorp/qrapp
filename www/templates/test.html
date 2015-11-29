@@ -1,38 +1,26 @@
     <ion-header-bar class="top">
-      <h1 class="title">Items</h1>
-      <button class="button button-icon ion-plus" ng-click="addItem()">
-      </button>
+      <h1 class="title">Home</h1>
     </ion-header-bar>
     <ion-content>
-
-      <ion-list can-swipe="listCanSwipe">
-        <ion-item ng-repeat="item in items">
-          {{item.name}}
-          <ion-option-button class="button-assertive" ng-click="removeItem(item)">
-            DELETE
-          </ion-option-button>
-        </ion-item>
-      </ion-list>
-      {{authData}}
-
-      {{name}}
-
-      {{gender}}
-
-      {{picture}}
-      <div ng-hide="authData" class="card" ng-click="login()">
-        <button class="item">
-        Log In with Facebook
-        </button>
-      </div>
-
-      <div class="card" ng-show="authData">
-        <div class="item item-text-wrap">
-          <img src="{{authData.profileImageURL}}" style="width: 50px;">
-          Hello {{authData.displayName}}
-          {{authData.id}}
-          !
+      <div class="row">
+        <div class="col-25">
+          <div class="card text-center">
+            <img src="{{authData.facebook.profileImageURL}}" style="width: 50px; padding-top: 2px;">
+          </div>
         </div>
-        <qr text="authData.id"></qr>
+        <div class="col-75" style="height: 100%;">
+          <div class="card text-center" style="padding-top: 10px; padding-bottom: 9px;">
+            Hello {{authData.facebook.displayName}},<br> here's your unique QR code!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card text-center">
+            <div style="padding-top: 7px;">
+              <qr text="authData.facebook.id"></qr>
+            </div>
+          </div>
+        </div>
       </div>
     </ion-content>
