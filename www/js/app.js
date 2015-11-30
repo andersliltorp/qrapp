@@ -45,6 +45,8 @@ firebaseApp.controller("ExampleController", function($scope, $rootScope, $state,
         $cordovaOauth.facebook("631605996943053", ["email"]).then(function(result) {
             auth.$authWithOAuthToken("facebook", result.access_token).then(function(authData) {
                 $rootScope.authData = authData;
+                console.log(authData);
+                
 
                 var ref = new Firebase("https://sweltering-torch-8697.firebaseio.com/");
                 var users = ref.child("users");
